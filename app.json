@@ -4,38 +4,36 @@
     "slug": "front_visionrec",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true
     },
+    "platforms": ["ios", "android", "web"],
     "android": {
+      "package": "com.front_visionrec",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "INTERNET"
+      ]
     },
     "web": {
       "bundler": "metro",
-      "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "output": "static"
     },
     "plugins": [
-      "expo-router",
-      [
-        "expo-splash-screen",
-        {
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 200,
-          "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
-        }
-      ]
+      "expo-router"
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "CLOUDINARY_API_KEY": "788673287788635",
+      "CLOUDINARY_API_SECRET": "Yb4mGdJxiGLpCWRrHD2l5PZMAdM",
+      "CLOUDINARY_CLOUD_NAME": "dsv6xkzcj"
     }
   }
 }
