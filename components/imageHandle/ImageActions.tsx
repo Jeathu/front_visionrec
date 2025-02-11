@@ -1,15 +1,18 @@
 import { Camera, Download, Images, Trash } from "lucide-react-native";
 import React from "react";
 import { Platform, Text, TouchableOpacity, View } from "react-native";
-
 import tw from "twrnc";
+import JsonDisplay from "./JsonDisplay";
+import {ImageActionsProps } from "@/interfaces/types";
 
-const ImageActions = ({
+
+const ImageActions: React.FC<ImageActionsProps>  = ({
   onTakePhoto,
   onSelectImage,
   onDeleteImage,
   onDownloadImage,
   image,
+  jsonData,
 }: any) => (
   <View style={tw.style("w-full px-4")}>
     <View style={tw.style("flex-row justify-between w-full")}>
@@ -72,21 +75,19 @@ const ImageActions = ({
             Sauvegarder l'image
           </Text>
         </TouchableOpacity>
-
-        <Text
-          style={tw.style(
-            "mt-6 font-bold text-xl sm:text-2xl",
-            "bg-black text-white",
-            "p-4",
-            "rounded-lg",
-            "text-center"
-          )}
-        >
-          🫙 Plastique
-        </Text>
       </View>
     )}
+
+        {/* Vérification que jsonData existe avant l'affichage */}
+    {jsonData && (
+      <View style={tw.style("mt-4 w-full p-2 bg-gray-100 rounded-lg")}>
+        <JsonDisplay jsonData={jsonData} />
+      </View>
+    )}
+
+
   </View>
+  
 );
 
 export default ImageActions;

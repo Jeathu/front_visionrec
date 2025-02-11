@@ -1,18 +1,25 @@
 import React from "react";
-import { View, Text, Button, ScrollView } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import { VictoryBar, VictoryChart, VictoryTheme } from "victory";
-import { useRouter } from "expo-router";
 import tw from "twrnc";
+import { BackendResponse } from "@/interfaces/types";
 
-const ResultsScreen = () => {
-  const router = useRouter();
+interface ResultsScreenProps {
+  jsonData: BackendResponse | null;
+}
 
+const ResultsScreen: React.FC<ResultsScreenProps> = ({ jsonData }) => {
+  // Extraire la confiance et la prédiction du JSON
+  const confidence = jsonData?.confidence || 0;
+  const prediction = jsonData?.prediction || "";
+
+  // Mettre à jour chartData en fonction de la prédiction
   const chartData = [
-    { category: "Plastique", confidence: 80 },
-    { category: "Métal", confidence: 0 },
-    { category: "Verre", confidence: 0 },
-    { category: "Papier", confidence: 0 },
-    { category: "Organique", confidence: 0 },
+    { category: "Plastique", confidence: prediction === "Plastique" ? confidence : 0 },
+    { category: "Métal", confidence: prediction === "Métal" ? confidence : 0 },
+    { category: "Verre", confidence: prediction === "Verre" ? confidence : 0 },
+    { category: "Papier", confidence: prediction === "Papier" ? confidence : 0 },
+    { category: "Organique", confidence: prediction === "Organique" ? confidence : 0 },
   ];
 
   return (
@@ -21,7 +28,12 @@ const ResultsScreen = () => {
 
       {/* Affichage du graphique */}
       <VictoryChart theme={VictoryTheme.material} domainPadding={20}>
-        <VictoryBar data={chartData} x="category" y="confidence" style={{ data: { fill: "#4CAF50" } }} />
+        <VictoryBar
+          data={chartData}
+          x="category"
+          y="confidence"
+          style={{ data: { fill: "#4CAF50" } }}
+        />
       </VictoryChart>
 
       {/* Affichage des résultats sous forme de texte */}
@@ -29,7 +41,7 @@ const ResultsScreen = () => {
         {chartData.map((item, index) => (
           <View key={index} style={tw`flex-row justify-between w-full my-2`}>
             <Text style={tw`text-lg`}>{item.category} :</Text>
-            <Text style={tw`font-semibold text-blue-500`}>{item.confidence}%</Text>
+            <Text style={tw`font-semibold text-blue-500`}>{item.confidence.toFixed(2)}%</Text>
           </View>
         ))}
       </View>

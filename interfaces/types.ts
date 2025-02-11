@@ -22,6 +22,17 @@ export interface ImageActionsProps {
   onDeleteImage: () => void;
   onDownloadImage: () => void;
   image: string | null;
+  jsonData: BackendResponse | null;
+}
+
+
+export interface BackendResponse {
+  waste_type?: string;
+  confidence: number;
+  message: string;
+  prediction: string;
+  success: boolean;
+  treatment: string;
 }
 
 export interface ImagePreviewProps {
@@ -29,9 +40,7 @@ export interface ImagePreviewProps {
 }
 
 
-export interface BackendResponse {
-  waste_type: string;
-}
+
 
 export interface AlertState {
   isVisible: boolean;
@@ -45,3 +54,5 @@ export interface ImageState {
   type?: string;
   name?: string;
 }
+
+

@@ -13,13 +13,12 @@ import {
   Dimensions,
   Platform,
   Text,
-  TouchableOpacity,
   View,
+  ScrollView,
 } from "react-native";
 import tw from "twrnc";
-import { BackendResponse } from "../../interfaces/types";
-import { NavigationContainer } from "@react-navigation/native";
-import JsonDisplay from "../../components/JsonDisplay"; 
+import { BackendResponse } from "@/interfaces/types";
+
 
 
 // Définir les dimensions de l'écran
@@ -45,7 +44,9 @@ const HomeScreenContent = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
-  const [jsonData, setJsonData] = useState<any>(null);
+  const [jsonData, setJsonData] = useState<BackendResponse | null>(null);
+
+
 
   // Effect pour vérifier les permissions de la caméra
   useEffect(() => {
@@ -171,6 +172,12 @@ const HomeScreenContent = () => {
   
       console.log("✅ Image sauvegardée avec succès dans le backend !");
       Alert.alert("Succès", "Image enregistrée avec succès !");
+
+
+      // Récupérer les données JSON depuis le backend
+      setJsonData(uploadResponse.data);
+
+
     } catch (error) {
       console.error("❌ Erreur :", error);
       Alert.alert("Erreur", "Une erreur est survenue lors du traitement de l'image.");
@@ -181,7 +188,7 @@ const HomeScreenContent = () => {
   
 
   return (
-    <View style={tw.style("flex-1 items-center justify-center bg-white p-4")}>
+    <ScrollView contentContainerStyle={tw.style("flex-grow items-center justify-center bg-white p-4")}>
       {error && <Text style={tw.style("text-red-500 mb-4")}>{error}</Text>}
       {loading && (
         <ActivityIndicator
@@ -197,6 +204,7 @@ const HomeScreenContent = () => {
         onDeleteImage={handleDeleteImage}
         onDownloadImage={handleUploadToBackend}
         image={image}
+        jsonData={jsonData}
       />
       <CustomAlert
         visible={showAlert}
@@ -204,19 +212,8 @@ const HomeScreenContent = () => {
         onConfirm={confirmDelete}
         onCancel={cancelDelete}
       />
-      {/*}
-      <View className="mt-4">
-        <TouchableOpacity
-          onPress={() => router.push("/(tab)/ResultsScreen")}
-          className="bg-blue-500 p-3 rounded-lg items-center"
-        >
-          <Text className="text-white font-bold">En savoir plus</Text>
-        </TouchableOpacity>
-      </View>
-      */}
-      {jsonData && <JsonDisplay jsonData={jsonData} />}
-
-    </View>
+      
+    </ScrollView>
   );
 };
 
