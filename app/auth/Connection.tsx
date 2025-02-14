@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
@@ -8,7 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import Register from '@/app/auth/Register';
+
 
 const Connection = () => {
 
@@ -36,25 +37,29 @@ const Connection = () => {
   // Fonction pour gérer la connexion
   const handleLogin = async () => {
     setError("");
-
     if (!validateForm()) return;
 
     setLoading(true);
     try {
-      const response = await fetch("https://46.202.195.228/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.trim(), password }),
+      const response = await axios.post("https://adidome.com/visionrec/auth/login", {
+        email: email.trim(),
+        password,
       });
 
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.message || "Erreur de connexion");
+      if (response.status !== 200) {
+        throw new Error(response.data.message || "Erreur de connexion");
+      }
 
       Alert.alert("Succès", "Connexion réussie !");
       router.replace("/(tab)/HomeScreen");
-    } catch (error: any) {
-      setError(error.message);
-      Alert.alert("Erreur", error.message);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        setError(error.response?.data.message || "Erreur de connexion");
+        Alert.alert("Erreur", error.response?.data.message || "Erreur de connexion");
+      } else {
+        setError("Une erreur inconnue s'est produite");
+        Alert.alert("Erreur", "Une erreur inconnue s'est produite");
+      }
     } finally {
       setLoading(false);
     }

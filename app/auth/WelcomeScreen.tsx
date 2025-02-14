@@ -30,7 +30,7 @@ export default function WelcomeScreen() {
       </View>
       <View className="space-y-6 px-4 mb-8">
         <TouchableOpacity
-          onPress={() => router.push("/auth/SignUp")}
+          onPress={() => router.push("/auth/Register")}
           className="py-4 bg-sky-500 mx-7 rounded-xl"
         >
           <Text className="text-xl font-bold text-center text-white">
@@ -42,7 +42,7 @@ export default function WelcomeScreen() {
         <Text className="text-black font-semibold">
           Vous avez déjà un compte ?
         </Text>
-        <TouchableOpacity onPress={() => router.push("/auth/LogIn")}>
+        <TouchableOpacity onPress={() => router.push("/auth/Connection")}>
           <Text className="font-semibold text-blue-800">Se connecter</Text>
         </TouchableOpacity>
       </View>

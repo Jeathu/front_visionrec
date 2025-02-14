@@ -19,9 +19,6 @@ import {
 import tw from "twrnc";
 import { BackendResponse } from "@/interfaces/types";
 
-
-
-// Définir les dimensions de l'écran
 const { width, height } = Dimensions.get("window");
 
 // Obtenir le type MIME à partir de l'URI
@@ -133,23 +130,17 @@ const HomeScreenContent = () => {
   
     try {
       setLoading(true);
-  
-      // Créer un objet FormData pour l'upload
       const formData = new FormData();
-  
-      // Gérer l'upload selon la plateforme
       if (Platform.OS === "web") {
-        // Sur le web, convertir l'URI en fichier
         const response = await fetch(image);
         const blob = await response.blob();
         formData.append("file", new File([blob], "upload.jpg", { type: blob.type }));
       } else {
-        // Sur mobile, utiliser l'URI directement
         const fileInfo = await FileSystem.getInfoAsync(image);
         if (!fileInfo.exists) {
           throw new Error("Fichier introuvable !");
         }
-        const mimeType = getMimeType(image) || "image/jpeg"; // Définir un type MIME par défaut
+        const mimeType = getMimeType(image) || "image/jpeg";
         formData.append("file", {
           uri: image,
           type: mimeType,
@@ -158,25 +149,32 @@ const HomeScreenContent = () => {
       }
   
       console.log("📤 Envoi de l'image au backend...");
-  
+
       // Utilisation de axios pour envoyer l'image
-      const uploadResponse = await axios.post("http://10.42.0.1:5000/upload", formData, {
+      const uploadResponse = await axios.post("https://adidome.com/visionrec/waste/classify", formData, {
         headers: {
-          "Content-Type": "multipart/form-data", // Laisser Axios gérer le content type
+          "Content-Type": "multipart/form-data", 
         },
       });
+
+     
   
       if (!uploadResponse.data.success) {
         throw new Error("Échec de l'envoi de l'image au backend.");
       }
-  
+
       console.log("✅ Image sauvegardée avec succès dans le backend !");
       Alert.alert("Succès", "Image enregistrée avec succès !");
-
 
       // Récupérer les données JSON depuis le backend
       setJsonData(uploadResponse.data);
 
+
+      // Naviguer vers ResultsScreen avec les données JSON
+      router.push({
+        pathname: "/(tab)/ResultsScreen",
+        params: { jsonData:JSON.stringify(uploadResponse.data) },
+      });
 
     } catch (error) {
       console.error("❌ Erreur :", error);
