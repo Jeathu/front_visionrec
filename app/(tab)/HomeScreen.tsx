@@ -151,12 +151,13 @@ const HomeScreenContent = () => {
       console.log("📤 Envoi de l'image au backend...");
 
       // Utilisation de axios pour envoyer l'image
-      const uploadResponse = await axios.post("https://adidome.com/visionrec/waste/classify", formData, {
+      const uploadResponse = await axios.post("http://192.168.98.111:5000/waste/classify", formData, {
         headers: {
           "Content-Type": "multipart/form-data", 
         },
       });
 
+      //https://adidome.com/visionrec/waste/classify
      
   
       if (!uploadResponse.data.success) {
